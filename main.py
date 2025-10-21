@@ -1,4 +1,4 @@
-#Data analysis with regression Model - Ethereum Trade Volume
+#Regression Model - Ethereum Trade Volume
 
 import kaggle
 import numpy as np
@@ -9,13 +9,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
-#authenticating the kaggle API
+
 kaggle.api.authenticate()
 
 
 kaggle.api.dataset_download_files('varpit94/ethereum-data', path='.', unzip=True)
 
-#reading the data
+#Read
 df = pd.read_csv('ETH-USD.csv')
 df.head()
 df.describe()
@@ -25,13 +25,13 @@ df.shape
 #df.hist(bins=20, figsize=(25,20), color='blue', alpha=0.8, edgecolor='black', linewidth=1.2)
 #plt.show()
 
-# Correlation matrix
+#Correlation matrix
 #corr_matrix = df.drop(columns=['Date']).corr()
 #plt.figure(figsize=(12, 10))
 #sns.heatmap(corr_matrix, annot=True)
 #plt.show()
 
-#data preprocessing
+#preprocessing
 df_copy = df
 #print(df_copy.isnull().sum())
 #print(df_copy.duplicated().sum())
@@ -39,18 +39,18 @@ df_copy.drop_duplicates(inplace=True)
 
 #print(df.dtypes)
 
-#converting the date column to datetime
+#date do datetime
 df['Date'] = pd.to_datetime(df['Date'])
 
-#extracting the year and month from the date column
+#year and month
 df['Year'] = df['Date'].dt.year
 df['Month'] = df['Date'].dt.month
 
-#create a new column YearMonth
+#column YearMonth
 df['YearMonth'] = df['Year'] * 100 + df['Month']
 df['YearMonth'] = df['YearMonth'].astype(int)
 
-#overwriting date column 
+#overwrite
 df_copy['Date'] = df_copy['YearMonth']
 
 #drop unnecessary columns
@@ -61,7 +61,7 @@ df_copy = df_copy.drop(['Year', 'Month', 'YearMonth'], axis=1)
 #print(df_copy.head())
 
 
-#splitting the data
+#data split
 x_ethereum = df_copy.iloc[:, :-1]
 y_ethereum = df_copy.iloc[:, -1]
 
@@ -75,11 +75,11 @@ x_ethereum, y_ethereum, test_size = 0.3)
 EX_train.shape
 Ey_train.shape
 
-#create linear regression
+#linear regression
 Emodel = LinearRegression()
 Emodel.fit(EX_train, Ey_train)
 
-#predict the data with model
+#predict
 E_prediction = Emodel.predict(EX_test)
 print('Predicted y for Ethereum', E_prediction)
 
@@ -114,7 +114,7 @@ print('Max target', max_target)
 min_row = df_copy[df_copy['Volume'] == min_target]
 max_row = df_copy[df_copy['Volume'] == max_target]
 
-#print the rows
+#print
 print('Min row:')
 print(min_row)
 print('\nMax row:')
@@ -130,3 +130,4 @@ plt.title('Volume over time')
 plt.xticks(rotation=45) #for better readability
 
 plt.tight_layout()#adjust the spacing
+
